@@ -2,41 +2,36 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Clone') {
             steps {
                 git branch: 'main', url: 'https://github.com/AbaliHorty/web1-app.git'
             }
         }
 
+        stage('Verify Tools') {
+            steps {
+                sh 'node -v'
+                sh 'npm -v'
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                sh './build.sh' // replace with your build command (e.g. mvn clean install)
+                echo "Building the project..."
+                sh 'ls -la'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                sh './test.sh' // replace with your test command
+                echo "Running tests..."
             }
         }
 
         stage('Deploy') {
-            when {
-                branch 'main'
-            }
             steps {
-                echo 'Deploying to production...'
-                sh './deploy.sh' // replace with your deploy command
+                echo "Deploying..."
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Cleaning up...'
-            cleanWs()
         }
     }
 }
